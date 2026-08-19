@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: nginx
-      version: "25.0.22"
+      version: "19.1.1"
       sourceRef:
         kind: HelmRepository
         name: bitnami
@@ -19,3 +19,4 @@ spec:
     replicaCount: 1
     service:
       type: ClusterIP
+
