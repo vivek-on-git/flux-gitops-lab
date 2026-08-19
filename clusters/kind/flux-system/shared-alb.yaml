@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1m
 
-  path: ./clusters/eks/apps/echo-server/shared-alb
+  path: ./clusters/kind/apps/echo-server/shared-alb
 
   prune: true
 

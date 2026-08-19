@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 10m
 
-  path: ./clusters/eks/apps/echo-server/aws-load-balancer-controller
+  path: ./clusters/kind/apps/echo-server/aws-load-balancer-controller
 
   prune: true
 
