@@ -8,11 +8,10 @@ spec:
 
   chart:
     spec:
-      chart: nginx
-      version: "25.0.22"
+      chart: .
       sourceRef:
-        kind: HelmRepository
-        name: bitnami
+        kind: OCIRepository
+        name: nginx
         namespace: flux-system
 
   values:
