@@ -1,0 +1,35 @@
+
+1. Set your KUBECONFIG:
+export KUBECONFIG=/home/vivek/VSCode_Projects/Terragrunt-Playground-1/environments/dev/dev1/eks/kubeconfig
+
+2. Install AWS Load Balancer Controller:
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller --version 3.5.0 -n kube-system \
+    --set clusterName=dev-dev1-eks \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    --set aws.region=ap-south-1 \
+    --set vpcId=vpc-0f549138b11abf13e
+
+3. Install nginx ingress controller:
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+kubectl create namespace ingress-nginx
+helm install nginx-ingress bitnami/nginx-ingress-controller --namespace ingress-nginx --values eks-applications/ingress-nginx-values.yaml
+
+4. Verify nginx is running:
+kubectl get pods -n ingress-nginx
+
+5. Create the shared ALB with your ACM certificate:
+kubectl apply -f eks-applications/shared-alb-ingress.yaml
+
+7. Get the ALB DNS name (wait 2-3 minutes):
+kubectl get ingress -n ingress-nginx shared-alb -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+
+8. Deploy echoserver:
+kubectl apply -f eks-applications/echoserver-deployment.yaml
+kubectl apply -f eks-applications/echoserver-ingress.yaml
+
+Internet --> AWS ALB --> Nginx Ingress Pod --> Application Service --> Application Pods

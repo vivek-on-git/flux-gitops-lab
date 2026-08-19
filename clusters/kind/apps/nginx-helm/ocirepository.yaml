@@ -1,17 +1,10 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
 metadata:
-  name: nginx
-  namespace: default
+  name: bitnami-nginx
+  namespace: flux-system
 spec:
-  interval: 5m
-
-  chartRef:
-    kind: OCIRepository
-    name: bitnami-nginx
-    namespace: flux-system
-
-  values:
-    replicaCount: 1
-    service:
-      type: ClusterIP
+  interval: 1h
+  url: oci://registry-1.docker.io/bitnamicharts/nginx
+  ref:
+    tag: "25.0.22"

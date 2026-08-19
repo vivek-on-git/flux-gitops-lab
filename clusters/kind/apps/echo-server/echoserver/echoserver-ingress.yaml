@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echoserver
+  namespace: echo-apps
+  annotations:
+    # Use nginx ingress controller (routes through shared ALB)
+    kubernetes.io/ingress.class: nginx
+    # (Optional) nginx-specific annotations
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  # Route for echoserver on specific domain
+  - host: "echoserver.dev1.vivekoncloud.dpdns.org"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echoserver
+            port:
+              number: 80
