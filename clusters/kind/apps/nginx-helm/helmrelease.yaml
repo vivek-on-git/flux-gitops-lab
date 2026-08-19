@@ -1,19 +1,19 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nginx
+  name: podinfo
   namespace: default
 spec:
   interval: 5m
 
   chart:
     spec:
-      chart: .
+      chart: podinfo
+      version: "6.9.x"
       sourceRef:
-        kind: OCIRepository
-        name: nginx
+        kind: HelmRepository
+        name: podinfo
         namespace: flux-system
 
   values:
-    service:
-      type: ClusterIP
+    replicaCount: 1
