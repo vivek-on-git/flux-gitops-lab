@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: nginx
-      version: "22.0.0"
+      version: "25.0.22"
       sourceRef:
         kind: HelmRepository
         name: bitnami
