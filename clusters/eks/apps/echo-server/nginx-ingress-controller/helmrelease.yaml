@@ -7,29 +7,16 @@ spec:
   interval: 5m
 
   chart:
-    spec:
-      chart: nginx-ingress-controller
-      version: "11.6.0"
-      sourceRef:
-        kind: HelmRepository
-        name: bitnami
-        namespace: flux-system
-      interval: 1h
+  spec:
+    chart: ingress-nginx
+    sourceRef:
+      kind: HelmRepository
+      name: ingress-nginx
+      namespace: flux-system
+    interval: 1h
 
   values:
     replicaCount: 2
-
-    image:
-      registry: docker.io
-      repository: bitnamilegacy/nginx-ingress-controller
-      pullPolicy: IfNotPresent
-      tag: "1.10.0"
-
-    defaultBackend:
-      image:
-        registry: docker.io
-        repository: bitnamilegacy/nginx
-        pullPolicy: IfNotPresent
 
     global:
       security:

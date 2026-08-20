@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1m
 
-  path: ./clusters/kind/apps/echo-server/nginx-ingress-controller
+  path: ./clusters/eks/apps/echo-server/nginx-ingress-controller
 
   prune: true
 
