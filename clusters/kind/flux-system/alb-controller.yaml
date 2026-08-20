@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: aws-load-balancer-controller
+  name: alb-controller
   namespace: flux-system
 spec:
   interval: 10m
