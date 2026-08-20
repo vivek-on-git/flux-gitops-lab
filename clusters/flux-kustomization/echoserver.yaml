@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 1m
 
-  path: ./clusters/kind/apps/echo-server/echoserver
+  path: ./clusters/eks/apps/echo-server/echoserver
 
   prune: true
   wait: true

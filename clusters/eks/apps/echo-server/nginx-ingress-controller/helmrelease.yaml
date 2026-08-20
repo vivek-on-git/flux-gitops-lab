@@ -3,28 +3,62 @@ kind: HelmRelease
 metadata:
   name: nginx-ingress
   namespace: ingress-nginx
-spec:
-  interval: 5m
 
-  chart:
-  spec:
-    chart: ingress-nginx
-    sourceRef:
-      kind: HelmRepository
-      name: ingress-nginx
-      namespace: flux-system
-    interval: 1h
+spec:
+  interval: 30m
+
+  chartRef:
+    kind: OCIRepository
+    name: bitnami-nginx-ingress-controller
+    namespace: flux-system
+
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+
+  upgrade:
+    remediation:
+      retries: 3
+      strategy: rollback
 
   values:
+
+    # ------------------------------------------------------------
+    # NGINX Ingress Controller
+    # Chart 12.0.7 -> Application 1.13.1
+    #
+    # DO NOT override image/tag here.
+    # Let chart 12.0.7 use its corresponding image.
+    # ------------------------------------------------------------
+
     replicaCount: 2
+
+
+    # ------------------------------------------------------------
+    # Global security
+    # ------------------------------------------------------------
 
     global:
       security:
         allowInsecureImages: true
 
+
+    # ------------------------------------------------------------
+    # ServiceAccount
+    # ------------------------------------------------------------
+
     serviceAccount:
       create: true
       name: nginx-ingress
+
+
+    # ------------------------------------------------------------
+    # Service
+    #
+    # AWS ALB is managed by AWS Load Balancer Controller.
+    # NGINX itself therefore remains ClusterIP.
+    # ------------------------------------------------------------
 
     service:
       type: ClusterIP
@@ -32,62 +66,121 @@ spec:
       targetPort: 80
       annotations: {}
 
+
+    # ------------------------------------------------------------
+    # NGINX configuration
+    # ------------------------------------------------------------
+
     config:
       http-redirect-code: "301"
       server-name-hash-bucket-size: "256"
       proxy-body-size: "10m"
+
+      # Required when NGINX is behind the AWS ALB and
+      # the original client protocol is supplied through
+      # X-Forwarded-Proto.
       use-forwarded-headers: "true"
+
       compute-full-forwarded-for: "true"
+
+      # ALB -> NGINX is normal HTTP.
       use-proxy-protocol: "false"
+
+
+    # ------------------------------------------------------------
+    # Pod security context
+    # ------------------------------------------------------------
 
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1001
       fsGroup: 1001
 
+
+    # ------------------------------------------------------------
+    # Container security context
+    # ------------------------------------------------------------
+
     securityContext:
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
+
       capabilities:
         add:
           - NET_BIND_SERVICE
+
         drop:
           - ALL
 
+
+    # ------------------------------------------------------------
+    # Resources
+    # ------------------------------------------------------------
+
     resources:
-      limits:
-        cpu: 500m
-        memory: 512Mi
       requests:
         cpu: 250m
         memory: 256Mi
+
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+
+    # ------------------------------------------------------------
+    # Horizontal Pod Autoscaler
+    # ------------------------------------------------------------
 
     autoscaling:
       enabled: true
       minReplicas: 2
       maxReplicas: 5
+
       targetCPUUtilizationPercentage: 70
       targetMemoryUtilizationPercentage: 80
+
+
+    # ------------------------------------------------------------
+    # Node placement
+    # ------------------------------------------------------------
 
     nodeSelector:
       kubernetes.io/os: linux
 
     tolerations: []
 
+
+    # ------------------------------------------------------------
+    # Pod anti-affinity
+    #
+    # Prefer spreading NGINX replicas across nodes.
+    # ------------------------------------------------------------
+
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
+
           - weight: 100
+
             podAffinityTerm:
+
               labelSelector:
                 matchExpressions:
+
                   - key: app.kubernetes.io/name
                     operator: In
                     values:
                       - nginx-ingress
+
               topologyKey: kubernetes.io/hostname
+
+
+    # ------------------------------------------------------------
+    # Metrics
+    # ------------------------------------------------------------
 
     metrics:
       enabled: true
+
       serviceMonitor:
         enabled: false
