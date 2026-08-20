@@ -34,7 +34,18 @@ spec:
 
     replicaCount: 2
 
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/nginx-ingress-controller
+      pullPolicy: IfNotPresent
+      tag: "1.13.1-debian-12-r1"
 
+    defaultBackend:
+      image:
+        registry: docker.io
+        repository: bitnamilegacy/nginx
+        pullPolicy: IfNotPresent
+        tag: "1.29.1-debian-12-r0"
     # ------------------------------------------------------------
     # Global security
     # ------------------------------------------------------------
