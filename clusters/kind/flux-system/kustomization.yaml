@@ -7,4 +7,4 @@ resources:
 #- alb-controller.yaml
 #- nginx-ingress-controller.yaml
 #- shared-alb.yaml
-#- echoserver.yaml
+- echoserver.yaml
