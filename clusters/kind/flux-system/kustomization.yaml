@@ -4,7 +4,7 @@ resources:
 - gotk-components.yaml
 - gotk-sync.yaml
 - ../apps/nginx-helm/flux-kustomization.yaml
-#- alb-controller.yaml
-#- nginx-ingress-controller.yaml
-#- shared-alb.yaml
+- alb-controller.yaml
+- nginx-ingress-controller.yaml
+- shared-alb.yaml
 - echoserver.yaml

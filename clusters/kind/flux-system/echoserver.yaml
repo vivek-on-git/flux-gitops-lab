@@ -16,5 +16,5 @@ spec:
     kind: GitRepository
     name: flux-system
 
-#  dependsOn:
- #   - name: shared-alb
+  dependsOn:
+    - name: shared-alb
