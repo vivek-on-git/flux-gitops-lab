@@ -17,4 +17,4 @@ spec:
   wait: true
 
 dependsOn:
-    - name: aws-load-balancer-controller
+    - name: alb-controller
