@@ -3,18 +3,13 @@ kind: Kustomization
 metadata:
   name: echoserver
   namespace: flux-system
-
 spec:
-  interval: 1m
+  interval: 10m
 
-  path: ./clusters/eks/apps/echo-server/echoserver
+  path: ./clusters/eks/apps/echo-server
 
   prune: true
-  wait: true
 
   sourceRef:
     kind: GitRepository
     name: flux-system
-
-  dependsOn:
-    - name: shared-alb
