@@ -15,7 +15,7 @@ spec:
   ingressClassName: alb
 
   rules:
-    - host: "*.dev1.vivekoncloud.dpdns.org"
+    - host: "flux-operator-ui.dev1.vivekoncloud.dpdns.org"
       http:
         paths:
           - path: /
