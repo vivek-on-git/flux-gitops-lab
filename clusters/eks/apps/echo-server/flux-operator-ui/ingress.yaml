@@ -9,6 +9,13 @@ metadata:
 
     # Listen on both HTTP and HTTPS
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    # HTTP to HTTPS redirect (301)
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS-1-2-2017-01'
+
+    # ACM Certificate ARN - SHARED for all applications
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:ap-south-1:824756206670:certificate/20f125a4-290b-4f67-86aa-df4e149387a6'
+
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/backend-protocol: HTTP
 spec:
